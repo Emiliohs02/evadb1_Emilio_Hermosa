@@ -9,7 +9,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 print("""Hello! I'm a bot that wants to help you to administrate your gmail account.\nThe main goal is to make you easier your experience on gmail.\n
-       I am going to classify your new eamils in emails for works or personal emails and a lot more of fascinating things.\n""")
+I am going to classify your new eamils in emails for works or personal emails and a lot more of fascinating things.\n""")
 # Different variables need for the script
 #Mail account
 mail = imaplib.IMAP4_SSL("imap.gmail.com")
@@ -20,7 +20,7 @@ criteria = {}
 # Get the number of message read
 uid_max = 0
 # Special key to connect to OpenAI
-openai.api_key = "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"
+openai.api_key = "Add Password"
 # Variable for not checking the first time the mail
 new_message = 0
 
