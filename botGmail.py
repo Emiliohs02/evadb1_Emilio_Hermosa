@@ -22,24 +22,30 @@ mode = input("What mode do you want me to use? (Write 1 for mode 1 and 2 for mod
 def achieve_emails(fd, sender):
     "Function to get all the emails from one date "
     # Gets the date with the correct format for imaplib
-    date_in = datetime(int(fd[6:]), int(fd[:2]), int(fd[3:5]))
-
-    date_in = date_in.strftime('%d-%b-%Y')
+    if fd != "no":
+        date_in = datetime(int(fd[6:]), int(fd[:2]), int(fd[3:5]))
+        date_in = date_in.strftime('%d-%b-%Y')
     # If there is a sender the name of the new folder with the mails and the query will be different than if only provided the date
-    if sender != "no":
+    if sender != "no" and fd != "no":
         mail.create(str(date_in) + "-" + str(sender))
         query = f'(SENTON {date_in} FROM "{sender}")'
-    else:
+    elif fd != "no":
         mail.create(str(date_in))
         query = f'(SENTON {date_in})'
+    else:
+        mail.create(str(sender))
+        query = f'(FROM "{sender}")'
+    
     result, data = mail.uid('search', None, query)
 
     # Process the results
     if result == 'OK':
         ids = data[0].split()
         for email_id in ids:
-            if sender != "no":
+            if sender != "no" and fd != "no":
                 mail.uid('copy', email_id, str(date_in) + "-" + str(sender))
+            elif sender != "no":
+                mail.uid('copy', email_id, str(sender))
             else:
                 mail.uid('copy', email_id, str(date_in))
             
@@ -133,7 +139,7 @@ cursor.query(f"""
 ).df()
 
 if mode == "2":
-    initial_date = input("What day do you want to get the emails from? (Format of date must be MM-DD-YYYY)\n")
+    initial_date = input("What day do you want to get the emails from? (Format of date must be MM-DD-YYYY). If you don't want a specific date write 'no'\n")
     #final_date = input("Tell me the last day you want me to take the emails from. If is the same date as the last one, write it as again.\n")
     sender = input("write the email address of a specific sender if you want emails from only one person. If not write 'no'\n")
     achieve_emails(initial_date, sender)
