@@ -64,7 +64,7 @@ criteria = {}
 # Get the number of message read
 uid_max = 0
 # Special key to connect to OpenAI
-openai.api_key = "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"
+openai.api_key = "Add Password"
 # Variable for not checking the first time the mail
 new_message = 0
 #llm = GPT4All("orca-mini-3b-gguf2-q4_0.gguf")
