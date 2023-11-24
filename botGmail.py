@@ -64,7 +64,7 @@ criteria = {}
 # Get the number of message read
 uid_max = 0
 # Special key to connect to OpenAI
-openai.api_key = "Add Password"
+openai.api_key = "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"
 # Variable for not checking the first time the mail
 new_message = 0
 #llm = GPT4All("orca-mini-3b-gguf2-q4_0.gguf")
@@ -195,11 +195,10 @@ else:
                                     sender = msg.get("From")
                                     if sender in possible_blocked:
                                         # Checks if the one who sent the email is blcked
-                                        cursor.query(f"INSERT INTO {str(take_name(username))}_blocked (addr, notrelevantmails) VALUES ('{str(take_name(sender))}', 0)").df()                                       
                                         res = cursor.query(f"SELECT notrelevantmails FROM {str(take_name(username))}_blocked WHERE addr = '{str(take_name(sender))}'").df()
                                         for index, counter in res.iterrows() :
                                             # In case he is blocked the mail will be erased and the program will not process nothing about it
-                                            if counter[take_name(username)+"_blocked.notrelevantmails"] > 5:
+                                            if counter["notrelevantmails"] >= 2:
                                                 mail.uid('store', str(uid).encode('utf-8'), '+FLAGS', '(\Deleted)')
                                                 mail.expunge()
                                                 blocked = 1
@@ -215,7 +214,7 @@ else:
                                                 # Update the number of irrelevant emails that the sender has sent till now
                                                 res = cursor.query(f"SELECT notrelevantmails FROM {str(take_name(username))}_blocked WHERE addr = '{str(take_name(sender))}'").df()
                                                 for index, counter in res.iterrows():
-                                                    val = counter[take_name(username)+"_blocked.notrelevantmails"]
+                                                    val = counter["notrelevantmails"]
                                                 val = val + 1
                                                 cursor.query(f"DELETE FROM {str(take_name(username))}_blocked WHERE addr = '{str(take_name(sender))}'").df()
                                                 cursor.query(f"INSERT INTO {str(take_name(username))}_blocked ( addr, notrelevantmails ) VALUES ( '{str(take_name(sender))}', '{str(val+1)}');").df()
